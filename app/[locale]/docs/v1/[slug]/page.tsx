@@ -1,5 +1,6 @@
 import Sidebar from "../../../../../components/Sidebar";
 import VersionSelector from "../../../../../components/VersionSelector";
+import Search from "../../../../../components/Search";
 
 export default function DocPage({
   params,
@@ -25,6 +26,8 @@ export default function DocPage({
           locale={locale}
           currentVersion={version}
         />
+        <Search locale={locale} version={version} />
+
 
         <div data-testid="doc-content" className="mt-6">
           <h1>{slug}</h1>
