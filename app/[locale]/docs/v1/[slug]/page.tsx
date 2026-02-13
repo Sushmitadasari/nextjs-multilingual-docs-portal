@@ -1,19 +1,14 @@
-export const revalidate = 60;
-
-export async function generateStaticParams() {
-  return [
-    { locale: "en", slug: "introduction" },
-    { locale: "es", slug: "introduction" },
-    { locale: "fr", slug: "introduction" },
-    { locale: "de", slug: "introduction" },
-  ];
-}
+import Sidebar from "../../../../../components/Sidebar";
+import VersionSelector from "../../../../../components/VersionSelector";
 
 export default function DocPage({
   params,
 }: {
   params: { locale: string; slug: string };
 }) {
+  const { locale, slug } = params;
+  const version = "v1";
+
   const content: Record<string, string> = {
     en: "Welcome to version 1 documentation.",
     es: "Bienvenido a la documentación versión 1.",
@@ -22,9 +17,20 @@ export default function DocPage({
   };
 
   return (
-    <div data-testid="doc-content" className="p-10">
-      <h1>Introduction</h1>
-      <p>{content[params.locale]}</p>
+    <div className="flex">
+      <Sidebar locale={locale} version={version} />
+
+      <div className="p-10 flex-1">
+        <VersionSelector
+          locale={locale}
+          currentVersion={version}
+        />
+
+        <div data-testid="doc-content" className="mt-6">
+          <h1>{slug}</h1>
+          <p>{content[locale]}</p>
+        </div>
+      </div>
     </div>
   );
 }
