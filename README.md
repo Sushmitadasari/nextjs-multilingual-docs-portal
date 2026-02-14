@@ -1,3 +1,4 @@
+
 # 📚 Next.js Multi-Language Documentation Portal
 
 A high-performance, production-ready documentation portal built with **Next.js**, featuring multi-language support, Incremental Static Regeneration (ISR), Docker containerization, dark mode, Swagger API integration, client-side search, and more.
@@ -251,22 +252,6 @@ Production build:
 npm run build
 npm start
 ```
-
----
-
-## ✅ Evaluation Checklist
-
-✔ Docker builds successfully
-✔ Container becomes healthy
-✔ Application accessible at localhost:3000
-✔ ISR headers verified
-✔ Multi-language routing functional
-✔ Swagger UI renders correctly
-✔ Dark mode toggle works
-✔ TOC scroll spy active
-✔ Feedback widget works
-✔ Clipboard copy works
-✔ Required `data-testid` attributes present
 
 ---
 
