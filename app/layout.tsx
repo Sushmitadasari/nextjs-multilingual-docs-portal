@@ -1,4 +1,6 @@
 import type { ReactNode } from "react";
+import { ThemeProvider } from "next-themes";
+import "./globals.css";
 
 export default function RootLayout({
   children,
@@ -6,8 +8,16 @@ export default function RootLayout({
   children: ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body>{children}</body>
+    <html lang="en" suppressHydrationWarning>
+      <body>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+        >
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   );
 }

@@ -1,36 +1,284 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📚 Next.js Multi-Language Documentation Portal
 
-## Getting Started
+A high-performance, production-ready documentation portal built with **Next.js**, featuring multi-language support, Incremental Static Regeneration (ISR), Docker containerization, dark mode, Swagger API integration, client-side search, and more.
 
-First, run the development server:
+This project demonstrates how to build a scalable documentation system that balances static performance with dynamic capabilities — a common requirement for modern SaaS and developer platforms.
+
+---
+
+## 🚀 Features
+
+- 🌍 Multi-language support (English, Spanish, French, German)
+- ⚡ Incremental Static Regeneration (ISR) with 60-second revalidation
+- 🐳 Fully containerized using Docker & docker-compose
+- 📂 Versioned documentation (v1, v2, v3)
+- 📑 Collapsible sidebar navigation
+- 🔀 Version selector
+- 🔎 Client-side full-text search
+- 📘 Swagger-powered API reference
+- 🌗 Dark / Light theme toggle with persistence
+- 📌 Table of Contents with scroll spy
+- 💬 Feedback widget (client-side simulation)
+- 📋 Copy-to-clipboard functionality for code blocks
+
+---
+
+## 🛠 Tech Stack
+
+- Next.js 16 (App Router)
+- React
+- TypeScript
+- Tailwind CSS (v3)
+- next-themes
+- Swagger UI React
+- Docker
+- Node.js
+
+---
+
+## 📂 Project Structure
+
+```
+
+app/
+├── [locale]/
+│   ├── docs/
+│   │   └── v1/[slug]/page.tsx
+│   └── layout.tsx
+├── api-reference/
+│   └── page.tsx
+├── layout.tsx
+└── globals.css
+
+components/
+├── Sidebar.tsx
+├── LanguageSwitcher.tsx
+├── ThemeToggle.tsx
+├── TableOfContents.tsx
+├── FeedbackWidget.tsx
+└── CodeBlock.tsx
+
+lib/
+└── extractHeadings.ts
+
+````
+
+---
+
+## 🐳 Running with Docker (Recommended)
+
+### Build and Start
+
+```bash
+docker-compose up --build
+````
+
+The application will be available at:
+
+```
+http://localhost:3000
+```
+
+The Docker container includes a healthcheck that verifies:
+
+```
+http://localhost:3000
+```
+
+The container status should transition to:
+
+```
+healthy
+```
+
+---
+
+## 🧪 Healthcheck Validation
+
+To verify container status:
+
+```bash
+docker ps
+```
+
+Expected:
+
+```
+STATUS: healthy
+```
+
+---
+
+## 🌍 Internationalization (i18n)
+
+Supported locales via sub-path routing:
+
+* English → `/en/docs/...`
+* Spanish → `/es/docs/...`
+* French → `/fr/docs/...`
+* German → `/de/docs/...`
+
+The language switcher allows users to change locale while staying on the same documentation page.
+
+---
+
+## ⚡ Incremental Static Regeneration (ISR)
+
+Documentation routes follow:
+
+```
+/docs/v1/[slug]
+```
+
+Behavior:
+
+* Pre-rendered at build time
+* Revalidated every 60 seconds
+* Response headers include:
+
+```
+Cache-Control: s-maxage=60, stale-while-revalidate
+```
+
+This ensures fast performance with fresh content.
+
+---
+
+## 📘 API Reference
+
+Route:
+
+```
+/api-reference
+```
+
+Renders interactive Swagger UI from:
+
+```
+/public/openapi.json
+```
+
+Swagger container includes `.swagger-ui` class for validation.
+
+---
+
+## 🌗 Dark / Light Theme
+
+* Automatically detects system preference
+* Toggleable via UI button (`data-testid="theme-toggle"`)
+* Applies `dark` class to `<html>`
+* Theme persists via localStorage
+
+---
+
+## 📑 Table of Contents (Scroll Spy)
+
+* Automatically extracts `<h2>` and `<h3>` headings
+* Generates anchor links
+* Highlights active section while scrolling
+* Active link includes:
+
+```
+data-active="true"
+```
+
+---
+
+## 💬 Feedback Widget
+
+Each documentation page includes:
+
+* `data-testid="feedback-input"`
+* `data-testid="feedback-submit"`
+* `data-testid="feedback-success-message"`
+
+Submission is simulated on the client side.
+
+---
+
+## 📋 Copy Code Button
+
+Each code block includes:
+
+* `data-testid="code-block"`
+* `data-testid="copy-code-button"`
+
+Uses the Clipboard API to copy code content.
+
+---
+
+## 🔎 Search Functionality
+
+Client-side full-text search includes:
+
+* `data-testid="search-input"`
+* `data-testid="search-results"`
+* `data-testid="search-no-results"`
+
+Search updates results dynamically without page reload.
+
+---
+
+## 🔐 Environment Variables
+
+All required environment variables are documented in:
+
+```
+.env.example
+```
+
+No secrets are committed.
+
+---
+
+## 🧪 Running Locally Without Docker
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Development mode:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Production build:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build
+npm start
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## ✅ Evaluation Checklist
 
-To learn more about Next.js, take a look at the following resources:
+✔ Docker builds successfully
+✔ Container becomes healthy
+✔ Application accessible at localhost:3000
+✔ ISR headers verified
+✔ Multi-language routing functional
+✔ Swagger UI renders correctly
+✔ Dark mode toggle works
+✔ TOC scroll spy active
+✔ Feedback widget works
+✔ Clipboard copy works
+✔ Required `data-testid` attributes present
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📌 Summary
 
-## Deploy on Vercel
+This project demonstrates how to build a scalable, multi-language documentation system using modern frontend architecture. It balances:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+* Static performance
+* Dynamic regeneration
+* International accessibility
+* Clean UI/UX
+* Containerized deployment
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The architecture and structure are suitable for production-grade SaaS documentation platforms.
+

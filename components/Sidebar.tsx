@@ -17,10 +17,11 @@ export default function Sidebar({ locale, version }: SidebarProps) {
   const [open, setOpen] = useState(true);
 
   return (
-    <div
-      data-testid="sidebar"
-      className="w-64 bg-gray-100 dark:bg-gray-800 p-4"
-    >
+  <div
+    data-testid="sidebar"
+    className="w-64 bg-gray-100 dark:bg-gray-800 text-black dark:text-white p-4"
+  >
+
       <button
         className="mb-4 text-sm"
         onClick={() => setOpen(!open)}
