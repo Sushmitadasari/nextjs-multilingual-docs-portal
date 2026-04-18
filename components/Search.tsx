@@ -1,77 +1,31 @@
-"use client";
-
+import Fuse from "fuse.js";
 import { useState } from "react";
-import Link from "next/link";
 
-type DocItem = {
-  slug: string;
-  title: string;
-  content: string;
-};
-
-type Props = {
-  locale: string;
-  version: string;
-};
-
-const docsData: DocItem[] = [
-  {
-    slug: "introduction",
-    title: "Introduction",
-    content: "Welcome to version documentation setup guide.",
-  },
-  {
-    slug: "installation",
-    title: "Installation",
-    content: "To install the project run npm install and npm run dev.",
-  },
-];
-
-export default function Search({ locale, version }: Props) {
+export default function Search({ docs }: any) {
   const [query, setQuery] = useState("");
 
-  const filtered = docsData.filter((doc) =>
-    (doc.title + " " + doc.content)
-      .toLowerCase()
-      .includes(query.toLowerCase())
-  );
+  const fuse = new Fuse(docs, {
+    keys: ["title", "content"],
+  });
+
+  const results = query ? fuse.search(query) : [];
 
   return (
-    <div className="mb-6">
+    <div>
       <input
-        type="text"
-        placeholder="Search documentation..."
+        data-testid="search-input"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        data-testid="search-input"
-        className="border px-3 py-2 w-full"
       />
 
-      {query && filtered.length === 0 && (
-        <div
-          data-testid="search-no-results"
-          className="mt-3 text-red-500"
-        >
-          No results found.
-        </div>
-      )}
+      <div data-testid="search-results">
+        {results.map((r: any, i: number) => (
+          <div key={i}>{r.item.title}</div>
+        ))}
+      </div>
 
-      {query && filtered.length > 0 && (
-        <div
-          data-testid="search-results"
-          className="mt-3 border p-3"
-        >
-          {filtered.map((doc) => (
-            <div key={doc.slug} className="mb-2">
-              <Link
-                href={`/${locale}/docs/${version}/${doc.slug}`}
-                className="text-blue-600"
-              >
-                {doc.title}
-              </Link>
-            </div>
-          ))}
-        </div>
+      {query && results.length === 0 && (
+        <div data-testid="search-no-results">No results</div>
       )}
     </div>
   );

@@ -1,57 +1,39 @@
-import {
-  extractHeadings,
-} from "../../../../../lib/extractHeadings";
-import FeedbackWidget from "@/components/FeedbackWidget";
-import TableOfContents from "../../../../../components/TableOfContents";
-import CodeBlock from "@/components/CodeBlock";
+import { getDocContent, getAllSlugs } from "@/lib/docs";
+import { notFound } from "next/navigation";
 
 export const revalidate = 60;
 
-function addHeadingIds(html: string): string {
-  return html.replace(/<h([2-3])>([^<]+)<\/h[2-3]>/g, (match, level, text) => {
-    const id = text.toLowerCase().replace(/\s+/g, '-');
-    return `<h${level} id="${id}">${text}</h${level}>`;
-  });
+// 🔥 THIS IS THE MAIN FIX
+export async function generateStaticParams() {
+  const locales = ["en", "es", "fr", "de"];
+  const versions = ["v1", "v2", "v3"];
+
+  const paths: any[] = [];
+
+  for (const locale of locales) {
+    for (const version of versions) {
+      const slugs = getAllSlugs(locale, version);
+
+      slugs.forEach(slug => {
+        paths.push({ locale, version, slug });
+      });
+    }
+  }
+
+  return paths;
 }
 
-export default function DocPage() {
-  const html = `
-  <h2>Introduction</h2>
-  <p>Welcome...</p>
-  <div style="height:800px"></div>
+export default function DocPage({ params }: any) {
+  const { locale, version, slug } = params;
 
-  <h2>Installation</h2>
-  <p>Steps...</p>
-  <div style="height:800px"></div>
+  const doc = getDocContent(locale, version, slug);
 
-  <h3>Step One</h3>
-  <p>Details...</p>
-  <div style="height:800px"></div>
-`;
-
-
-  const processedHtml = addHeadingIds(html);
-  const headings = extractHeadings(processedHtml);
+  if (!doc) return notFound();
 
   return (
-  <div className="flex">
-    {/* Main Content */}
-    <div className="flex-1 p-8">
-      <div
-        data-testid="doc-content"
-        dangerouslySetInnerHTML={{ __html: processedHtml }}
-      />
-      <CodeBlock
-  code={`npm install next react react-dom`}
-/>
-
-      {/* Feedback Widget Below Content */}
-      <FeedbackWidget />
+    <div data-testid="doc-content">
+      <h1>{doc.title}</h1>
+      <p>{doc.content}</p>
     </div>
-
-    {/* Table of Contents */}
-    <TableOfContents headings={headings} />
-  </div>
-);
-
+  );
 }

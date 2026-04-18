@@ -1,8 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  turbopack: {
-    root: __dirname,
+  i18n: {
+    locales: ["en", "es", "fr", "de"],
+    defaultLocale: "en",
   },
 };
 
-module.exports = nextConfig;
+export default nextConfig;
