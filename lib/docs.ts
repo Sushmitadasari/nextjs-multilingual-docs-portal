@@ -1,47 +1,27 @@
-type DocContent = {
-  title: string;
-  body: string;
-};
+import fs from "fs";
+import path from "path";
 
-type LocaleDocs = {
-  [slug: string]: DocContent;
-};
+const docsDir = path.join(process.cwd(), "_docs");
 
-export const docsContent: Record<string, LocaleDocs> = {
-  en: {
-    introduction: {
-      title: "Introduction",
-      body: "Welcome to version 1 of our documentation.",
-    },
-  },
-  es: {
-    introduction: {
-      title: "Introducción",
-      body: "Bienvenido a la versión 1 de nuestra documentación.",
-    },
-  },
-  fr: {
-    introduction: {
-      title: "Introduction",
-      body: "Bienvenue dans la version 1 de notre documentation.",
-    },
-  },
-  de: {
-    introduction: {
-      title: "Einführung",
-      body: "Willkommen zur Version 1 unserer Dokumentation.",
-    },
-  },
-};
+// Get single doc
+export function getDocContent(locale: string, version: string, slug: string) {
+  const filePath = path.join(docsDir, locale, version, `${slug}.md`);
 
-export function getDoc(locale: string, slug: string) {
-  return docsContent[locale]?.[slug];
+  if (!fs.existsSync(filePath)) return null;
+
+  const content = fs.readFileSync(filePath, "utf-8");
+
+  return {
+    title: slug,
+    content,
+  };
 }
 
-export function getAllSlugs() {
-  return ["introduction"];
-}
+// Get all slugs
+export function getAllSlugs(locale: string, version: string) {
+  const dir = path.join(docsDir, locale, version);
 
-export function getAllLocales() {
-  return ["en", "es", "fr", "de"];
+  if (!fs.existsSync(dir)) return [];
+
+  return fs.readdirSync(dir).map(file => file.replace(".md", ""));
 }
